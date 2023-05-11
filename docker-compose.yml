@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  mysqldb:
+    image: mysql:8.0
+    volumes:
+      - maboke-mysql-data:/var/lib/mysql
+    networks:
+      - mysqlnetwork
+    ports:
+      - "3308:3306"
+    #env_file:
+    #  - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+      
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      MONGO_INITDB_DATABASE: maboke
+    volumes:
+      - maboke-mongo-data:/data/db
+    networks:
+      - mongonetwork
+
+volumes:
+  maboke-mysql-data:
+  maboke-mongo-data:
+
+networks:
+  mongonetwork:
+    name: maboke_network
+  mysqlnetwork:
+    name: mysql_network  

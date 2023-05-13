@@ -1,6 +1,21 @@
 version: '3.4'
 
 services:
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - "27018:27017"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
+
+    networks:
+      - mongonetwork
+
   mysqldb:
     image: mysql:8.0
     volumes:
@@ -15,23 +30,9 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: todos
       
-  mongodb:
-    image: mongo
-    restart: always
-    ports:
-      - "27018:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: secret
-      MONGO_INITDB_DATABASE: maboke
-    volumes:
-      - maboke-mongo-data:/data/db
-    networks:
-      - mongonetwork
 
 volumes:
   maboke-mysql-data:
-  maboke-mongo-data:
 
 networks:
   mongonetwork:
